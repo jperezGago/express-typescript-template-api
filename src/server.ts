@@ -1,7 +1,9 @@
 import * as dotenv from 'dotenv'
 import express from 'express'
+import { dbConnector } from './config'
 
 dotenv.config()
+dbConnector()
 const app = express()
 const PORT = process.env.PORT ?? 3000
 
