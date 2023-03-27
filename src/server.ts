@@ -1,15 +1,20 @@
 import * as dotenv from 'dotenv'
-import express from 'express'
-import { dbConnector } from './config'
-
 dotenv.config()
-dbConnector()
-const app = express()
-const PORT = process.env.PORT ?? 3000
+import express from 'express'
+import bodyParser from 'body-parser'
+import { dbConnector, env } from './config'
+import { errorHandler, notFoundHandler } from './middlewares'
+import { router } from './routers'
 
-app.get('/', (_, res) => {
-  res.send('Hello World!')
-})
+dbConnector()
+
+const app = express()
+const { PORT } = env
+
+app.use(bodyParser.json())
+app.use(router)
+app.use(notFoundHandler)
+app.use(errorHandler)
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`)
